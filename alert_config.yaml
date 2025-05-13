@@ -1,0 +1,12 @@
+groups:
+  - name: geo_readiness
+    rules:
+      - alert: GeoReadinessFailures
+        expr: increases(geo_exceptions_total[1h]) > 0
+        for: 5m
+        labels:
+          severity: warning
+          team: data-ops
+        annotations:
+          summary: "New geo-readiness failures detected"
+          description: "There have been {{ $value }} new failed geocoding attempts in the last hour."

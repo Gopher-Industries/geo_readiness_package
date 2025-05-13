@@ -1,0 +1,26 @@
+{
+  "job_name": "GeoReadinessCheck",
+  "schedule": {
+    "frequency_type": "Daily",
+    "frequency_interval": 1,
+    "active_start_time": "030000"
+  },
+  "steps": [
+    {
+      "step_name": "Profiling",
+      "command": "sqlcmd -E -S localhost -d MyDB -i C:\Scripts\geo_profiling.sql"
+    },
+    {
+      "step_name": "Geocode_Python",
+      "command": "C:\Python39\python.exe C:\Scripts\geo_geocode.py"
+    },
+    {
+      "step_name": "Run_SP",
+      "command": "sqlcmd -E -S localhost -d MyDB -Q \"EXEC dbo.GeoReadinessCheck;\""
+    }
+  ],
+  "notifications": {
+    "on_success": ["DBA_Team@company.com"],
+    "on_failure": ["DBA_Team@company.com", "Ops_Alerts@company.com"]
+  }
+}
